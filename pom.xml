@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.1and1</groupId>
     <artifactId>yajsync-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.0</version>
     <name>yajsync: parent</name>
     <description>Java rsync API and Java rsync client/server implementation</description>
     <inceptionYear>2013</inceptionYear>
@@ -30,7 +28,7 @@
         <connection>scm:git:ssh://git@github.com/1and1/yajsync.git</connection>
         <developerConnection>${project.scm.connection}</developerConnection>
         <url>http://github.com/1and1/yajsync</url>
-        <tag>HEAD</tag>
+        <tag>yajsync-parent-0.9.0</tag>
     </scm>
 
     <dependencies>
