@@ -30,6 +30,7 @@
         <connection>scm:git:ssh://git@github.com/1and1/yajsync.git</connection>
         <developerConnection>${project.scm.connection}</developerConnection>
         <url>http://github.com/1and1/yajsync</url>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencies>
