@@ -44,4 +44,17 @@
         <module>yajsync-core</module>
         <module>yajsync-app</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <scmCommentPrefix>mvn release [ci skip]</scmCommentPrefix>
+                    <stagingRepository>1and1-mam-staging-repository::default::${distribution.repo.staging}</stagingRepository>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
