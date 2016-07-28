@@ -67,6 +67,12 @@ Features
 Please be aware though that the API currently is unstable, not
 documented and will most probably change in the near future.
 
+Versions
+--------
+
+Fork version 0.9.1:
+
++ fix: remove unix file attributes to use posix instead, due to exception on mac os
 
 Warning
 -------
