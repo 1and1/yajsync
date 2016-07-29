@@ -19,20 +19,24 @@
  */
 package com.github.perlundq.yajsync.attr;
 
-import com.github.perlundq.yajsync.internal.util.Environment;
-import com.github.perlundq.yajsync.internal.util.FileOps;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.GroupPrincipal;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.UserPrincipal;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import com.github.perlundq.yajsync.internal.util.Environment;
+import com.github.perlundq.yajsync.internal.util.FileOps;
 
 public class RsyncFileAttributes
 {
@@ -84,6 +88,14 @@ public class RsyncFileAttributes
              new Group(attrs.group().getName(), Group.JVM_GROUP.id()));
     }
 
+    private static boolean isUnixFileSystem(Path path)
+    {
+        return path.
+                getFileSystem().
+                supportedFileAttributeViews().
+                contains("unix");
+    }
+
     private static boolean isPosixFileSystem(Path path)
     {
         return path.
@@ -94,7 +106,28 @@ public class RsyncFileAttributes
 
     public static RsyncFileAttributes stat(Path path) throws IOException
     {
-        if (isPosixFileSystem(path)) {
+        if (isUnixFileSystem(path)) {
+            Map<String, Object> attrs =
+                Files.readAttributes(path, "unix:lastModifiedTime,mode,size,uid,owner,gid,group",
+                                     LinkOption.NOFOLLOW_LINKS);
+            long mtime = ((FileTime) attrs.get("lastModifiedTime")).to(TimeUnit.SECONDS);
+            int mode = (int) attrs.get("mode");
+            long size = (long) attrs.get("size");
+            String user = ((UserPrincipal) attrs.get("owner")).getName();
+            int uid = (int) attrs.get("uid");
+            String group = ((GroupPrincipal) attrs.get("group")).getName();
+            int gid = (int) attrs.get("gid");
+            // Check ids, because on mac os can be java.lang.IllegalArgumentException
+            // exceptions thrown from User class
+            // e.g. com.github.perlundq.yajsync.attr.User.<init>(User.java:51)
+            if (uid >= 0 && uid <= User.ID_MAX && gid >= 0 && gid <= Group.ID_MAX) {
+                return new RsyncFileAttributes(mode, size, mtime,
+                        new User(user, uid), new Group(group, gid));
+            } else {
+                return new RsyncFileAttributes(Files.readAttributes(path, PosixFileAttributes.class,
+                        LinkOption.NOFOLLOW_LINKS));
+            }
+        } else if (isPosixFileSystem(path)) {
             PosixFileAttributes attrs =
                 Files.readAttributes(path, PosixFileAttributes.class,
                                      LinkOption.NOFOLLOW_LINKS);
