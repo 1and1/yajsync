@@ -72,7 +72,7 @@ Versions
 
 Fork version 0.9.2:
 
-+ fix: remove unix file attributes to use posix instead, due to exception on mac os
++ fix: check whether unix file attributes (user and group id) are valid, due to exception on mac os
 
 Warning
 -------
