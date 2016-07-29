@@ -70,7 +70,7 @@ documented and will most probably change in the near future.
 Versions
 --------
 
-Fork version 0.9.1:
+Fork version 0.9.2:
 
 + fix: remove unix file attributes to use posix instead, due to exception on mac os
 
